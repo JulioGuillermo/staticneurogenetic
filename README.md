@@ -67,3 +67,7 @@ for i := 0; i < 300; i++ {
     agents.NextGeneration() //Evolve each neural networks
 }
 ```
+
+## Example
+
+You can find a complete example [here](https://github.com/JulioGuillermo/OXO)

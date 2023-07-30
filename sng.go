@@ -22,6 +22,7 @@ const (
 	DivPointCross = CrossType(iota)
 	RandCross
 	MonoParent
+	ArithmeticCross
 )
 
 type SNG struct {
@@ -41,7 +42,16 @@ type SNG struct {
 	Generation uint64
 }
 
-func NewSNG(layers []int, activation Activation, population_size int, survivors int, mutation_rate float32, mutation_size float64, mutation_type MutationType, cross_type CrossType) *SNG {
+func NewSNG(
+	layers []int,
+	activation Activation,
+	population_size int,
+	survivors int,
+	mutation_rate float32,
+	mutation_size float64,
+	mutation_type MutationType,
+	cross_type CrossType,
+) *SNG {
 	genome_size := getGenomeSize(layers)
 	population := make([]Individual, population_size)
 	for i := 0; i < population_size; i++ {
@@ -79,6 +89,8 @@ func (p *SNG) nextGenerationIndividual(ctl chan int, wg *sync.WaitGroup) {
 			p.Population[i].monoParentCross(&p.Population[father])
 		case RandCross:
 			p.Population[i].randomCross(&p.Population[father], &p.Population[mother])
+		case ArithmeticCross:
+			p.Population[i].aritmeticCross(&p.Population[father], &p.Population[mother])
 		default:
 			p.Population[i].divPointCross(&p.Population[father], &p.Population[mother])
 		}

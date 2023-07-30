@@ -21,7 +21,11 @@ func (p *Individual) randomize() {
 	}
 }
 
-func (p *Individual) output(input []float64, layers []int, activation ActivationFunction) []float64 {
+func (p *Individual) output(
+	input []float64,
+	layers []int,
+	activation ActivationFunction,
+) []float64 {
 	var (
 		offset = 0
 		in     = input
@@ -63,6 +67,13 @@ func (p *Individual) divPointCross(father, mother *Individual) {
 	}
 }
 
+func (p *Individual) aritmeticCross(father, mother *Individual) {
+	alpha := rand.Float64()
+	for i := 0; i < len(p.Genome); i++ {
+		p.Genome[i] = father.Genome[i]*alpha + mother.Genome[i]*(1-alpha)
+	}
+}
+
 func (p *Individual) randomCross(father, mother *Individual) {
 	for i := 0; i < len(p.Genome); i++ {
 		if rand.Float32() < 0.5 {
@@ -75,14 +86,14 @@ func (p *Individual) randomCross(father, mother *Individual) {
 
 func (p *Individual) oneMutate(mut_rate float32, mut_size float64) {
 	if rand.Float32() < mut_rate {
-		p.Genome[rand.Intn(len(p.Genome))] += rand.Float64()*2*mut_size - mut_size
+		p.Genome[rand.Intn(len(p.Genome))] += rand.NormFloat64() * mut_size
 	}
 }
 
 func (p *Individual) multiMutate(mut_rate float32, mut_size float64) {
 	for i := 0; i < len(p.Genome); i++ {
 		if rand.Float32() < mut_rate {
-			p.Genome[rand.Intn(len(p.Genome))] += rand.Float64()*2*mut_size - mut_size
+			p.Genome[rand.Intn(len(p.Genome))] += rand.NormFloat64() * mut_size
 		}
 	}
 }

@@ -52,7 +52,7 @@ func NewSNG(
 	mutation_type MutationType,
 	cross_type CrossType,
 ) *SNG {
-	genome_size := getGenomeSize(layers)
+	genome_size := GetGenomeSize(layers)
 	population := make([]Individual, population_size)
 	for i := 0; i < population_size; i++ {
 		population[i] = NewIndividual(genome_size)
@@ -81,7 +81,7 @@ func (p *SNG) nextGenerationIndividual(ctl chan int, wg *sync.WaitGroup) {
 	var father, mother int
 	for i := range ctl {
 		// Select father and mother from survivors
-		father, mother = p.selectFatherMother()
+		father, mother = p.SelectFatherMother()
 
 		// Create the new individual
 		switch p.CrossType {
@@ -132,7 +132,7 @@ func (p *SNG) NextGeneration() {
 	var father, mother int
 	for i := p.Survivors; i < len(p.Population); i++ {
 		// Select father and mother from survivors
-		father, mother = p.selectFatherMother()
+		father, mother = p.SelectFatherMother()
 
 		// Create the new individual
 		switch p.CrossType {
@@ -186,7 +186,7 @@ func (p *SNG) GetLastBestIndex() int {
 }
 
 // Selection
-func (p *SNG) selectFatherMother() (father, mother int) {
+func (p *SNG) SelectFatherMother() (father, mother int) {
 	father = rand.Intn(p.Survivors)
 	mother = rand.Intn(p.Survivors)
 	if father > mother {
@@ -202,9 +202,9 @@ func (p *SNG) SetPopulationSize(size int, randomize bool) error {
 	}
 	p.Sort()
 	if len(p.Population) < size {
-		genome_size := getGenomeSize(p.Layers)
+		genome_size := GetGenomeSize(p.Layers)
 		for i := len(p.Population); i < size; i++ {
-			father, mother := p.selectFatherMother()
+			father, mother := p.SelectFatherMother()
 			individual := NewIndividual(genome_size)
 			if randomize {
 				individual.Randomize()

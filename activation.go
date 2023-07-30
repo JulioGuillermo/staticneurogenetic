@@ -9,19 +9,19 @@ type Activation int
 const (
 	Linear = Activation(iota)
 	Relu
-    LeakyRelu
+	LeakyRelu
 	Sigmoid
 	Tanh
 	Sin
 	Sign
 )
 
-func getActivation(activation Activation) ActivationFunction {
+func GetActivation(activation Activation) ActivationFunction {
 	switch activation {
 	case Relu:
 		return ReluFunc
-    case LeakyRelu:
-        return LeakyReluFunc
+	case LeakyRelu:
+		return LeakyReluFunc
 	case Sigmoid:
 		return SigmoidFunc
 	case Tanh:
@@ -47,10 +47,10 @@ func ReluFunc(x float64) float64 {
 }
 
 func LeakyReluFunc(x float64) float64 {
-    if x < 0 {
-        return x / 10
-    }
-    return x
+	if x < 0 {
+		return x / 10
+	}
+	return x
 }
 
 func SigmoidFunc(x float64) float64 {

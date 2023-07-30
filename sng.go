@@ -55,8 +55,8 @@ func NewSNG(
 	genome_size := getGenomeSize(layers)
 	population := make([]Individual, population_size)
 	for i := 0; i < population_size; i++ {
-		population[i] = newIndividual(genome_size)
-		population[i].randomize()
+		population[i] = NewIndividual(genome_size)
+		population[i].Randomize()
 	}
 
 	return &SNG{
@@ -86,20 +86,20 @@ func (p *SNG) nextGenerationIndividual(ctl chan int, wg *sync.WaitGroup) {
 		// Create the new individual
 		switch p.CrossType {
 		case MonoParent:
-			p.Population[i].monoParentCross(&p.Population[father])
+			p.Population[i].MonoParentCross(&p.Population[father])
 		case RandCross:
-			p.Population[i].randomCross(&p.Population[father], &p.Population[mother])
+			p.Population[i].RandomCross(&p.Population[father], &p.Population[mother])
 		case ArithmeticCross:
-			p.Population[i].aritmeticCross(&p.Population[father], &p.Population[mother])
+			p.Population[i].AritmeticCross(&p.Population[father], &p.Population[mother])
 		default:
-			p.Population[i].divPointCross(&p.Population[father], &p.Population[mother])
+			p.Population[i].DivPointCross(&p.Population[father], &p.Population[mother])
 		}
 
 		switch p.MutationType {
 		case MultiMutation:
-			p.Population[i].multiMutate(p.MutRate, p.MutSize)
+			p.Population[i].MultiMutate(p.MutRate, p.MutSize)
 		default:
-			p.Population[i].oneMutate(p.MutRate, p.MutSize)
+			p.Population[i].OneMutate(p.MutRate, p.MutSize)
 		}
 
 		wg.Done()
@@ -137,18 +137,18 @@ func (p *SNG) NextGeneration() {
 		// Create the new individual
 		switch p.CrossType {
 		case MonoParent:
-			p.Population[i].monoParentCross(&p.Population[father])
+			p.Population[i].MonoParentCross(&p.Population[father])
 		case RandCross:
-			p.Population[i].randomCross(&p.Population[father], &p.Population[mother])
+			p.Population[i].RandomCross(&p.Population[father], &p.Population[mother])
 		default:
-			p.Population[i].divPointCross(&p.Population[father], &p.Population[mother])
+			p.Population[i].DivPointCross(&p.Population[father], &p.Population[mother])
 		}
 
 		switch p.MutationType {
 		case MultiMutation:
-			p.Population[i].multiMutate(p.MutRate, p.MutSize)
+			p.Population[i].MultiMutate(p.MutRate, p.MutSize)
 		default:
-			p.Population[i].oneMutate(p.MutRate, p.MutSize)
+			p.Population[i].OneMutate(p.MutRate, p.MutSize)
 		}
 	}
 }
@@ -205,17 +205,17 @@ func (p *SNG) SetPopulationSize(size int, randomize bool) error {
 		genome_size := getGenomeSize(p.Layers)
 		for i := len(p.Population); i < size; i++ {
 			father, mother := p.selectFatherMother()
-			individual := newIndividual(genome_size)
+			individual := NewIndividual(genome_size)
 			if randomize {
-				individual.randomize()
+				individual.Randomize()
 			} else {
 				switch p.CrossType {
 				case MonoParent:
-					individual.monoParentCross(&p.Population[father])
+					individual.MonoParentCross(&p.Population[father])
 				case RandCross:
-					individual.randomCross(&p.Population[father], &p.Population[mother])
+					individual.RandomCross(&p.Population[father], &p.Population[mother])
 				default:
-					individual.divPointCross(&p.Population[father], &p.Population[mother])
+					individual.DivPointCross(&p.Population[father], &p.Population[mother])
 				}
 			}
 			p.Population = append(p.Population, individual)
@@ -228,7 +228,7 @@ func (p *SNG) SetPopulationSize(size int, randomize bool) error {
 
 func (p *SNG) Randomize(from, to int) {
 	for i := from; i < to; i++ {
-		p.Population[i].randomize()
+		p.Population[i].Randomize()
 	}
 }
 

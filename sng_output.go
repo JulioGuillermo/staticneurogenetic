@@ -2,7 +2,7 @@ package staticneurogenetic
 
 // Output
 func (p *SNG) Output(ind int, input []float64) []float64 {
-	return p.Population[ind].output(input, p.Layers, getActivation(p.Activation))
+	return p.Population[ind].Output(input, p.Layers, getActivation(p.Activation))
 }
 
 func (p *SNG) MaxOutput(ind int, input []float64) (value float64, index int) {
